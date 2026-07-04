@@ -224,13 +224,25 @@
             });
         }
 
-        let width = 0;
+        let hasLoaded = false;
         const bar = document.getElementById('loadBar');
         const text = document.getElementById('percentText');
-        const interval = setInterval(() => {
-            if (width >= 100) { clearInterval(interval); document.getElementById('splash-screen').classList.add('splash-hidden'); }
-            else { width++; bar.style.width = width + '%'; text.innerText = width + '%'; }
-        }, 20);
+        const loadInterval = setInterval(() => {
+            if (hasLoaded) return;
+            let width = 0;
+            const timer = setInterval(() => {
+                if (width >= 100) { 
+                    clearInterval(timer); 
+                    document.getElementById('splash-screen').classList.add('splash-hidden'); 
+                    hasLoaded = true;
+                } else { 
+                    width++; 
+                    bar.style.width = width + '%'; 
+                    text.innerText = width + '%'; 
+                }
+            }, 20);
+            clearInterval(loadInterval);
+        }, 100);
 
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTbvtWltox5iEVqIuta2_R0qNMV35nDf9jGJRwJqSI9Y6kFn5pnV3SbxfLqp61dmXVJhMhm20Fb4pTB/pub?output=csv';
         let menuData = [], cart = [];
@@ -274,7 +286,11 @@
                     <span class="food-name">${item.name}</span>
                     <div class="sizes-container">
                         ${item.sizes.map(s => {
-                            if (cat !== 'كريب' && s.label === 'رول وسط') return '';
+                            if (cat === 'كريب') {
+                                if (s.label !== 'عادي صغير' && s.label !== 'عادي وسط' && s.label !== 'رول صغير' && s.label !== 'رول وسط') return '';
+                            } else {
+                                if (s.label.includes('رول') || s.label.includes('عادي')) return '';
+                            }
                             return `
                             <div class="size-item">
                                 <span class="size-label">${s.label}</span>
