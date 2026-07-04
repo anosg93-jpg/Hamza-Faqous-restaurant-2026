@@ -6,7 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>حمزة فقوس</title>
+    <title>مطعم حمزة فقوس</title>
     
     <link rel="manifest" href="manifest.json">
     
@@ -213,18 +213,20 @@
             addrFields.forEach(el => el.style.display = (type === 'تيك أواي') ? 'none' : 'block');
         }
 
+        // تم تغيير الـ Version إلى v=9999 لإجبار المتصفح على تخطي الكاش كلياً فوراً
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js?v=4').then(reg => {
+            navigator.serviceWorker.register('sw.js?v=9999').then(reg => {
                 reg.onupdatefound = () => {
                     const worker = reg.installing;
                     worker.onstatechange = () => {
-                        if (worker.state === 'installed' && navigator.serviceWorker.controller) window.location.reload();
+                        if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+                            window.location.reload(true);
+                        }
                     };
                 };
             });
         }
 
-        // معالجة وإصلاح مشكلة شاشة الترحيب لتعمل دورة برمجية مستقرة واحدة
         let width = 0;
         const bar = document.getElementById('loadBar');
         const text = document.getElementById('percentText');
@@ -249,7 +251,7 @@
             const data = await response.text();
             const lines = data.split('\n');
             
-            // حل مشكلة آخر عمود برمجياً: تنظيف وحذف أي علامات سطر جديد مخفية من العناوين تماماً
+            // تنظيف تام ومطلق لسطر العناوين الرئيسي لمنع أي رمز مخفي
             const headers = lines[0].split(',').map(h => h.replace(/[\r\n]+/g, '').trim());
             
             menuData = [];
@@ -258,10 +260,19 @@
                 const col = lines[i].split(',');
                 let category = col[0].trim(), name = col[1].trim();
                 let sizes = [];
+                
                 for(let j = 2; j < col.length; j++) {
-                    if(col[j] && !isNaN(col[j].trim())) {
-                        const currentHeader = headers[j] ? headers[j] : '';
-                        sizes.push({ label: currentHeader, price: col[j].trim() });
+                    const val = col[j] ? col[j].trim() : '';
+                    let headerName = headers[j] ? headers[j].trim() : '';
+                    
+                    // خدعة برمجية نهائية: لو العمود رقمه هو العمود الحادي عشر (موقع رول وسط الكارثي في الـ CSV)
+                    // نُجبر الكود على تسميته "رول وسط" ليتخطى أخطاء الفواصل المترتبة من جوجل شيت
+                    if (j === 11 || headerName.includes('رول') && headerName.includes('وسط')) {
+                        headerName = 'رول وسط';
+                    }
+
+                    if(val && !isNaN(val)) {
+                        sizes.push({ label: headerName, price: val });
                     }
                 }
                 if(name) menuData.push({ category, name, sizes });
@@ -288,14 +299,10 @@
                     <span class="food-name">${item.name}</span>
                     <div class="sizes-container">
                         ${item.sizes.filter(s => {
-                            // تنظيف نصوص الأحجام لمطابقة دقيقة 100%
                             const currentLabel = s.label.trim();
-                            
                             if (cat.trim() === 'كريب') {
-                                // إرجاع الأحجام الأربعة كاملة (بما فيها رول وسط النظيفة)
                                 return true;
                             } else {
-                                // حذف خيار رول وسط نهائياً من باقي الأقسام الأخرى فقط لا غير
                                 return currentLabel !== 'رول وسط';
                             }
                         }).map(s => `
