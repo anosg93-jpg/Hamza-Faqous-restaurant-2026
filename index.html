@@ -25,6 +25,8 @@
           --success: #34c759;
           --header-bg: #faf9f6;
           --blur-bg: rgba(250, 249, 246, 0.6);
+          --price-color: #000;
+          --input-border: #ccc;
         }
 
         body.dark-mode {
@@ -35,6 +37,8 @@
           --glass: rgba(30, 30, 30, 0.95);
           --header-bg: #121212;
           --blur-bg: rgba(18, 18, 18, 0.6);
+          --price-color: #ffffff;
+          --input-border: #444;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; transition: background 0.3s, color 0.3s; }
@@ -107,13 +111,13 @@
         .sizes-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
         .size-item { background: var(--bg); padding: 8px; border-radius: 12px; border: 1px solid rgba(128, 128, 128, 0.1); display: flex; flex-direction: column; align-items: center; gap: 4px; }
         .size-label { font-size: 0.85rem; font-weight: 700; color: var(--desc-text); }
-        .size-price { font-size: 0.95rem; font-weight: 800; color: #000; }
+        .size-price { font-size: 0.95rem; font-weight: 800; color: var(--price-color); }
         .add-cart-btn { background: var(--accent); color: #000; border: none; padding: 6px 14px; border-radius: 7px; font-weight: 800; cursor: pointer; font-size: 0.8rem; width: 100%; }
         .add-cart-btn.added { background: var(--success); color: white; }
 
         .restaurant-footer { padding: 30px 20px; text-align: center; background: var(--white); margin-top: 20px; }
-        .footer-phones a { display: block; color: var(--accent); text-decoration: none; font-weight: 800; font-size: 1.3rem; margin-bottom: 10px; }
-        .dev-info { font-size: 0.75rem; color: var(--desc-text); margin-top: 15px; }
+        .footer-phones a { display: block; color: var(--accent); text-decoration: none; font-weight: 800; font-size: 1.6rem; margin-bottom: 10px; }
+        .dev-info { font-size: 0.85rem; color: var(--main-text); margin-top: 15px; font-weight: 700; }
 
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 2000; display: none; justify-content: center; align-items: flex-end; }
         .modal-content { background: var(--white); width: 100%; max-width: 500px; padding: 25px; border-radius: 30px 30px 0 0; max-height: 90vh; overflow-y: auto; }
@@ -121,7 +125,7 @@
         .order-type-btn { flex: 1; padding: 12px; border: 2px solid var(--accent); border-radius: 14px; cursor: pointer; text-align: center; font-weight: 800; }
         .order-type-btn.active { background: var(--accent); color: #000; }
         .user-fields { text-align: right; }
-        .user-fields input { background: var(--bg); border: none; padding: 16px; border-radius: 14px; width: 100%; margin-bottom: 10px; color: var(--main-text); font-weight: 600; }
+        .user-fields input { background: var(--bg); border: 2px solid var(--input-border); padding: 16px; border-radius: 14px; width: 100%; margin-bottom: 10px; color: var(--main-text); font-weight: 600; }
         .submit-btn { background: #34c759; color: white; border: none; padding: 18px; border-radius: 18px; width: 100%; font-weight: 800; }
     </style>
 </head>
@@ -170,23 +174,27 @@
             <a href="tel:01060218999">01060218999</a>
         </div>
         <div class="dev-info">
+            جميع الحقوق محفوظة لدى مطعم حمزة فقوس<br>
             Designed by eng / Anas Gaber shehata<br>
-            <a href="tel:01003800314">📞 01003800314</a>
+            <a href="tel:01003800314" style="color:var(--main-text);">📞 01003800314</a>
         </div>
     </footer>
 
     <div class="modal" id="cartModal" onclick="if(event.target==this) toggleCart(false)">
         <div class="modal-content">
-            <h2>طلباتك</h2>
+            <h2 style="text-align: right; margin-bottom: 15px;">طلباتك</h2>
             <div id="cartItemsList" style="margin-bottom:15px;"></div>
             <div class="order-type-box">
                 <div class="order-type-btn active" id="deliveryBtn" onclick="setOrderType('دليفري')">دليفري</div>
                 <div class="order-type-btn" id="takeawayBtn" onclick="setOrderType('تيك أواي')">تيك أواي</div>
             </div>
             <div class="user-fields">
-                <input type="text" id="uName" placeholder="الاسم بالكامل">
-                <input type="tel" id="uPhone" placeholder="رقم الهاتف">
-                <input type="text" id="uAddr" placeholder="العنوان بالتفصيل" class="address-field">
+                <div style="text-align: right; margin-bottom: 5px; font-weight: 800;">الاسم بالكامل:</div>
+                <input type="text" id="uName" placeholder="اكتب اسمك هنا">
+                <div style="text-align: right; margin-bottom: 5px; font-weight: 800;">رقم الهاتف:</div>
+                <input type="tel" id="uPhone" placeholder="01xxxxxxxxx">
+                <div style="text-align: right; margin-bottom: 5px; font-weight: 800;" class="address-field">العنوان بالتفصيل:</div>
+                <input type="text" id="uAddr" placeholder="العنوان" class="address-field">
             </div>
             <button class="submit-btn" onclick="sendToWA()">تأكيد الطلب عبر WhatsApp</button>
         </div>
@@ -198,9 +206,8 @@
             orderType = type;
             document.getElementById('deliveryBtn').classList.toggle('active', type === 'دليفري');
             document.getElementById('takeawayBtn').classList.toggle('active', type === 'تيك أواي');
-            const addrField = document.querySelector('.address-field');
-            if(type === 'تيك أواي') addrField.style.display = 'none';
-            else addrField.style.display = 'block';
+            const addrFields = document.querySelectorAll('.address-field');
+            addrFields.forEach(el => el.style.display = (type === 'تيك أواي') ? 'none' : 'block');
         }
 
         if ('serviceWorker' in navigator) {
@@ -300,8 +307,8 @@
             let total = 0;
             document.getElementById('cartItemsList').innerHTML = cart.map((item, idx) => {
                 total += parseFloat(item.price);
-                return `<div style="display:flex; justify-content:space-between; padding:5px; border-bottom:1px solid #eee;"><span>${item.name}</span><b style="color:#000;">${item.price} ج.م</b></div>`;
-            }).join('') + `<div style="text-align:center; margin-top:10px;">إجمالي الطلب: <b style="color:#000;">${total} ج.م</b></div>`;
+                return `<div style="display:flex; justify-content:space-between; padding:5px; border-bottom:1px solid #eee;"><span>${item.name}</span><b style="color:var(--price-color);">${item.price} ج.م</b></div>`;
+            }).join('') + `<div style="text-align:center; margin-top:10px;">إجمالي الطلب: <b style="color:var(--price-color);">${total} ج.م</b></div>`;
         }
 
         function toggleCart(s) { document.getElementById('cartModal').style.display = s ? 'flex' : 'none'; }
