@@ -18,8 +18,8 @@
           --bg: #f4f5f7; 
           --main-text: #0b3168; 
           --desc-text: #536785;
-          --accent: #ff6a00; 
-          --address-tag: #ff6a00;
+          --accent: #e6b800; 
+          --address-tag: #e6b800;
           --white: #faf9f6; 
           --glass: rgba(250, 249, 246, 0.95);
           --success: #34c759;
@@ -28,13 +28,13 @@
         }
 
         body.dark-mode {
-          --bg: #0b3168; 
-          --main-text: #faf9f6;
-          --desc-text: #cbd5e1;
-          --white: #113d7a;
-          --glass: rgba(11, 49, 104, 0.95);
-          --header-bg: #113d7a;
-          --blur-bg: rgba(11, 49, 104, 0.6);
+          --bg: #121212; 
+          --main-text: #ffffff;
+          --desc-text: #b3b3b3;
+          --white: #1e1e1e;
+          --glass: rgba(30, 30, 30, 0.95);
+          --header-bg: #121212;
+          --blur-bg: rgba(18, 18, 18, 0.6);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; transition: background 0.3s, color 0.3s; }
@@ -52,16 +52,16 @@
         
         .loader-logo-big {
           width: 100%; height: 100%; border-radius: 50%;
-          object-fit: cover; box-shadow: 0 10px 40px rgba(11, 49, 104, 0.1);
-          animation: luxuryDynamicLogo 2s ease-in-out infinite alternate;
+          object-fit: cover; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+          animation: spinIn 1.5s ease-out forwards;
         }
+        @keyframes spinIn { 0% { transform: rotate(-360deg) scale(0); opacity: 0; } 100% { transform: rotate(0deg) scale(1); opacity: 1; } }
+        
         .loader-text { font-weight: 800; color: var(--main-text); font-size: 2.1rem; margin-bottom: 4px; }
         .loader-slogan { font-size: 1.15rem; color: var(--accent); font-weight: 700; margin-bottom: 20px; }
-        .loading-bar-container { width: 100%; height: 8px; background: rgba(11, 49, 104, 0.1); border-radius: 10px; overflow: hidden; }
+        .loading-bar-container { width: 100%; height: 8px; background: rgba(128, 128, 128, 0.1); border-radius: 10px; overflow: hidden; }
         .loading-bar { width: 0%; height: 100%; background: var(--accent); }
         .percent-text { font-weight: 800; color: var(--main-text); margin-top: 10px; display: block; }
-        
-        @keyframes luxuryDynamicLogo { from { transform: scale(0.9); } to { transform: scale(1.05); } }
         .splash-hidden { transform: translateY(-100%); pointer-events: none; }
 
         /* --- الحاوية العلوية --- */
@@ -71,14 +71,14 @@
           top: 0;
           z-index: 1000;
           background: var(--header-bg);
-          box-shadow: 0 4px 25px rgba(11, 49, 104, 0.08);
+          box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
           padding-top: calc(12px + env(safe-area-inset-top, 0px));
         }
 
         header { display: flex; flex-direction: column; align-items: center; padding: 4px 0 6px 0; }
         .header-top { width: 100%; display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 6px; }
         
-        .header-logo-container { width: 95px; height: 95px; border-radius: 50%; background: var(--white); padding: 3px; box-shadow: 0 3px 12px rgba(11, 49, 104, 0.15); overflow: hidden; }
+        .header-logo-container { width: 95px; height: 95px; border-radius: 50%; background: var(--white); padding: 3px; box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15); overflow: hidden; }
         .header-logo { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
         
         .theme-toggle { position: absolute; right: 16px; top: 12px; width: 40px; height: 40px; background: var(--bg); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.1rem; border: none; color: var(--main-text); box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
@@ -86,46 +86,43 @@
         .cart-trigger { width: 40px; height: 40px; background: var(--bg); border-radius: 12px; display: flex; align-items: center; justify-content: center; position: relative; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
         .cart-trigger.shake { animation: cartShake 0.5s ease-in-out; }
         @keyframes cartShake { 0%, 100% { transform: scale(1) rotate(0deg); } 20%, 60% { transform: scale(1.25) rotate(-12deg); } 40%, 80% { transform: scale(1.25) rotate(12deg); } }
-        .badge { position: absolute; top: -5px; right: -5px; background: #ff3b30; color: white; font-size: 10px; font-weight: 800; width: 19px; height: 19px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid white; transform: scale(0); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .badge { position: absolute; top: -5px; right: -5px; background: #ff3b30; color: white; font-size: 10px; font-weight: 800; width: 19px; height: 19px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid white; transform: scale(0); transition: 0.3s; }
         .badge.show { transform: scale(1); }
         
-        .header-bottom-addr { text-align: center; width: 100%; padding: 6px 16px; border-top: 0.5px solid rgba(11, 49, 104, 0.06); display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .header-bottom-addr { text-align: center; width: 100%; padding: 6px 16px; border-top: 0.5px solid rgba(128, 128, 128, 0.1); display: flex; flex-direction: column; align-items: center; gap: 4px; }
         .addr-tag { color: var(--accent); font-weight: 800; font-size: 0.85rem; }
         .brand-addr { font-size: 0.85rem; color: var(--main-text); font-weight: 700; line-height: 1.4; text-align: center; padding: 0 20px; }
 
-        .category-nav { display: flex; overflow-x: auto; white-space: nowrap; padding: 10px 16px 15px 16px; gap: 15px; scrollbar-width: none; background: var(--glass); backdrop-filter: blur(20px); border-bottom: 0.5px solid rgba(11, 49, 104, 0.1); -webkit-overflow-scrolling: touch; }
-        .category-nav::-webkit-scrollbar { display: none; }
-        
+        .category-nav { display: flex; overflow-x: auto; white-space: nowrap; padding: 10px 16px 15px 16px; gap: 15px; scrollbar-width: none; background: var(--glass); backdrop-filter: blur(20px); border-bottom: 0.5px solid rgba(128, 128, 128, 0.1); }
         .cat-item { display: flex; flex-direction: column; align-items: center; min-width: 70px; cursor: pointer; flex-shrink: 0; }
-        .cat-img-box { width: 60px; height: 60px; border-radius: 50%; background: #e5e5ea; overflow: hidden; border: 3px solid transparent; transition: 0.3s; }
+        .cat-img-box { width: 60px; height: 60px; border-radius: 50%; background: #e5e5ea; overflow: hidden; border: 3px solid transparent; }
         .cat-img-box img { width: 100%; height: 100%; object-fit: cover; }
-        .cat-item.active .cat-img-box { border-color: var(--accent); transform: scale(1.05); }
+        .cat-item.active .cat-img-box { border-color: var(--accent); }
         .cat-item span { font-size: 0.8rem; font-weight: 800; color: var(--desc-text); margin-top: 6px; }
-        .cat-item.active span { color: var(--main-text); }
 
         .menu-list { padding: 10px; max-width: 550px; margin: 10px auto auto auto; }
-        .food-card { background: var(--white); border-radius: 20px; margin-bottom: 14px; padding: 16px; box-shadow: 0 4px 15px rgba(11, 49, 104, 0.03); }
+        .food-card { background: var(--white); border-radius: 20px; margin-bottom: 14px; padding: 16px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03); }
         .food-name { font-weight: 800; font-size: 1.15rem; color: var(--main-text); margin-bottom: 12px; display: block; }
         
         .sizes-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
-        .size-item { background: var(--bg); padding: 8px; border-radius: 12px; border: 1px solid rgba(11,49,104,0.08); display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .size-item { background: var(--bg); padding: 8px; border-radius: 12px; border: 1px solid rgba(128, 128, 128, 0.1); display: flex; flex-direction: column; align-items: center; gap: 4px; }
         .size-label { font-size: 0.85rem; font-weight: 700; color: var(--desc-text); }
-        .size-price { font-size: 0.95rem; font-weight: 800; color: var(--accent); }
-        .add-cart-btn { background: var(--accent); color: white; border: none; padding: 6px 14px; border-radius: 7px; font-weight: 800; cursor: pointer; font-size: 0.8rem; width: 100%; transition: 0.3s; }
-        .add-cart-btn.added { background: var(--success); }
+        .size-price { font-size: 0.95rem; font-weight: 800; color: #000; }
+        .add-cart-btn { background: var(--accent); color: #000; border: none; padding: 6px 14px; border-radius: 7px; font-weight: 800; cursor: pointer; font-size: 0.8rem; width: 100%; }
+        .add-cart-btn.added { background: var(--success); color: white; }
 
-        /* Footer */
-        .restaurant-footer { padding: 30px 20px; text-align: center; background: var(--white); border-top: 1px solid rgba(11, 49, 104, 0.05); margin-top: 20px; }
+        .restaurant-footer { padding: 30px 20px; text-align: center; background: var(--white); margin-top: 20px; }
         .footer-phones a { display: block; color: var(--accent); text-decoration: none; font-weight: 800; font-size: 1.3rem; margin-bottom: 10px; }
         .dev-info { font-size: 0.75rem; color: var(--desc-text); margin-top: 15px; }
-        .dev-info a { color: var(--main-text); text-decoration: none; font-weight: 800; }
 
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 49, 104, 0.4); backdrop-filter: blur(5px); z-index: 2000; display: none; justify-content: center; align-items: flex-end; }
-        .modal-content { background: var(--white); width: 100%; max-width: 500px; padding: 25px; border-radius: 30px 30px 0 0; max-height: 90vh; overflow-y: auto; color: var(--main-text); box-shadow: 0 -10px 30px rgba(11, 49, 104, 0.15); }
-        .cart-item-card { display: flex; align-items: center; justify-content: space-between; padding: 14px; background: rgba(11, 49, 104, 0.04); border-radius: 14px; margin-bottom: 10px; }
-        .remove-btn { color: #ff3b30; font-weight: 800; cursor: pointer; }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 2000; display: none; justify-content: center; align-items: flex-end; }
+        .modal-content { background: var(--white); width: 100%; max-width: 500px; padding: 25px; border-radius: 30px 30px 0 0; max-height: 90vh; overflow-y: auto; }
+        .order-type-box { display: flex; gap: 10px; margin-bottom: 15px; }
+        .order-type-btn { flex: 1; padding: 12px; border: 2px solid var(--accent); border-radius: 14px; cursor: pointer; text-align: center; font-weight: 800; }
+        .order-type-btn.active { background: var(--accent); color: #000; }
+        .user-fields { text-align: right; }
         .user-fields input { background: var(--bg); border: none; padding: 16px; border-radius: 14px; width: 100%; margin-bottom: 10px; color: var(--main-text); font-weight: 600; }
-        .submit-btn { background: #34c759; color: white; border: none; padding: 18px; border-radius: 18px; width: 100%; font-weight: 800; cursor: pointer; font-size: 1rem; }
+        .submit-btn { background: #34c759; color: white; border: none; padding: 18px; border-radius: 18px; width: 100%; font-weight: 800; }
     </style>
 </head>
 <body>
@@ -176,36 +173,42 @@
             Designed by eng / Anas Gaber shehata<br>
             <a href="tel:01003800314">📞 01003800314</a>
         </div>
-        <p class="footer-rights">جميع الحقوق محفوظة لـ حمزة فقوس 2026 ©</p>
     </footer>
 
     <div class="modal" id="cartModal" onclick="if(event.target==this) toggleCart(false)">
         <div class="modal-content">
             <h2>طلباتك</h2>
-            <div id="cartItemsList"></div>
-            <div style="margin: 20px 0; padding: 15px; background: rgba(255, 106, 0, 0.1); border-radius: 18px; display: flex; justify-content: space-between;">
-                <b>المجموع النهائي</b>
-                <b id="totalAmount">0 ج.م</b>
+            <div id="cartItemsList" style="margin-bottom:15px;"></div>
+            <div class="order-type-box">
+                <div class="order-type-btn active" id="deliveryBtn" onclick="setOrderType('دليفري')">دليفري</div>
+                <div class="order-type-btn" id="takeawayBtn" onclick="setOrderType('تيك أواي')">تيك أواي</div>
             </div>
             <div class="user-fields">
                 <input type="text" id="uName" placeholder="الاسم بالكامل">
-                <input type="tel" id="uPhone" placeholder="رقم الموبايل">
-                <input type="text" id="uAddr" placeholder="العنوان بالتفصيل">
+                <input type="tel" id="uPhone" placeholder="رقم الهاتف">
+                <input type="text" id="uAddr" placeholder="العنوان بالتفصيل" class="address-field">
             </div>
             <button class="submit-btn" onclick="sendToWA()">تأكيد الطلب عبر WhatsApp</button>
         </div>
     </div>
 
     <script>
-        // تفعيل التحديث التلقائي (Service Worker)
+        let orderType = 'دليفري';
+        function setOrderType(type) {
+            orderType = type;
+            document.getElementById('deliveryBtn').classList.toggle('active', type === 'دليفري');
+            document.getElementById('takeawayBtn').classList.toggle('active', type === 'تيك أواي');
+            const addrField = document.querySelector('.address-field');
+            if(type === 'تيك أواي') addrField.style.display = 'none';
+            else addrField.style.display = 'block';
+        }
+
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js').then(reg => {
                 reg.onupdatefound = () => {
                     const worker = reg.installing;
                     worker.onstatechange = () => {
-                        if (worker.state === 'installed' && navigator.serviceWorker.controller) {
-                            window.location.reload();
-                        }
+                        if (worker.state === 'installed' && navigator.serviceWorker.controller) window.location.reload();
                     };
                 };
             });
@@ -224,31 +227,19 @@
 
         function toggleTheme() { document.body.classList.toggle('dark-mode'); }
 
-        function parseCSVLine(text) {
-            let p = '', r = []; let q = false;
-            for (let i = 0; i < text.length; i++) {
-                let c = text[i];
-                if (c === '"') { q = !q; }
-                else if (c === ',' && !q) { r.push(p); p = ''; }
-                else { p += c; }
-            }
-            r.push(p); return r;
-        }
-
         async function loadMenu() {
             const response = await fetch(csvUrl);
             const data = await response.text();
             const lines = data.split('\n');
-            const headers = parseCSVLine(lines[0]);
+            const headers = lines[0].split(',');
             menuData = [];
             for(let i = 1; i < lines.length; i++) {
                 if(!lines[i].trim()) continue;
-                const col = parseCSVLine(lines[i]);
-                let category = col[0]?.trim();
-                let name = col[1]?.trim();
+                const col = lines[i].split(',');
+                let category = col[0].trim(), name = col[1].trim();
                 let sizes = [];
                 for(let j = 2; j < col.length; j++) {
-                    if(col[j] && !isNaN(col[j])) sizes.push({ label: headers[j], price: col[j] });
+                    if(col[j] && !isNaN(col[j])) sizes.push({ label: headers[j].trim(), price: col[j].trim() });
                 }
                 if(name) menuData.push({ category, name, sizes });
             }
@@ -290,7 +281,7 @@
             const cartBtn = document.getElementById('cartBtn');
             const cartRect = cartBtn.getBoundingClientRect();
             const fly = document.createElement('div');
-            fly.style.cssText = `position:fixed; left:${rect.left}px; top:${rect.top}px; background:var(--accent); color:white; padding:5px 10px; border-radius:10px; z-index:9999; transition:0.6s;`;
+            fly.style.cssText = `position:fixed; left:${rect.left}px; top:${rect.top}px; background:var(--accent); color:#000; padding:5px 10px; border-radius:10px; z-index:9999; transition:0.6s;`;
             fly.innerText = "+";
             document.body.appendChild(fly);
             setTimeout(() => { fly.style.left = cartRect.left + 'px'; fly.style.top = cartRect.top + 'px'; fly.style.opacity = 0; }, 10);
@@ -309,19 +300,15 @@
             let total = 0;
             document.getElementById('cartItemsList').innerHTML = cart.map((item, idx) => {
                 total += parseFloat(item.price);
-                return `<div class="cart-item-card"><span>${item.name}</span><span class="remove-btn" onclick="removeFromCart(${idx})">حذف</span></div>`;
-            }).join('');
-            document.getElementById('totalAmount').innerText = total + " ج.م";
+                return `<div style="display:flex; justify-content:space-between; padding:5px; border-bottom:1px solid #eee;"><span>${item.name}</span><b style="color:#000;">${item.price} ج.م</b></div>`;
+            }).join('') + `<div style="text-align:center; margin-top:10px;">إجمالي الطلب: <b style="color:#000;">${total} ج.م</b></div>`;
         }
-
-        function removeFromCart(idx) { cart.splice(idx, 1); updateCart(); }
 
         function toggleCart(s) { document.getElementById('cartModal').style.display = s ? 'flex' : 'none'; }
 
         function sendToWA() {
             const n = document.getElementById('uName').value, p = document.getElementById('uPhone').value, a = document.getElementById('uAddr').value;
-            if(!n || !p || !a) return alert("يرجى إكمال البيانات");
-            let msg = `طلب جديد: ${n}\nالهاتف: ${p}\nالعنوان: ${a}\nالطلبات: ` + cart.map(i => i.name).join(', ');
+            let msg = `طلب جديد من مطعم حمزة\nالنوع: ${orderType}\nالاسم: ${n}\nالهاتف: ${p}\n${orderType=='دليفري' ? 'العنوان: '+a : ''}\nالطلبات: ` + cart.map(i => i.name).join(', ') + `\nشكرًا لطلبكم من مطعم حمزة`;
             window.open(`https://wa.me/201060218999?text=${encodeURIComponent(msg)}`);
         }
 
