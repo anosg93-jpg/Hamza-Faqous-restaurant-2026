@@ -213,9 +213,8 @@
             addrFields.forEach(el => el.style.display = (type === 'تيك أواي') ? 'none' : 'block');
         }
 
-        // تم تغيير الـ Version إلى v=9999 لإجبار المتصفح على تخطي الكاش كلياً فوراً
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js?v=9999').then(reg => {
+            navigator.serviceWorker.register('sw.js?v=99999').then(reg => {
                 reg.onupdatefound = () => {
                     const worker = reg.installing;
                     worker.onstatechange = () => {
@@ -251,7 +250,6 @@
             const data = await response.text();
             const lines = data.split('\n');
             
-            // تنظيف تام ومطلق لسطر العناوين الرئيسي لمنع أي رمز مخفي
             const headers = lines[0].split(',').map(h => h.replace(/[\r\n]+/g, '').trim());
             
             menuData = [];
@@ -262,16 +260,21 @@
                 let sizes = [];
                 
                 for(let j = 2; j < col.length; j++) {
-                    const val = col[j] ? col[j].trim() : '';
+                    let val = col[j] ? col[j].trim() : '';
                     let headerName = headers[j] ? headers[j].trim() : '';
                     
-                    // خدعة برمجية نهائية: لو العمود رقمه هو العمود الحادي عشر (موقع رول وسط الكارثي في الـ CSV)
-                    // نُجبر الكود على تسميته "رول وسط" ليتخطى أخطاء الفواصل المترتبة من جوجل شيت
-                    if (j === 11 || headerName.includes('رول') && headerName.includes('وسط')) {
-                        headerName = 'رول وسط';
-                    }
-
-                    if(val && !isNaN(val)) {
+                    if(val && !isNaN(val) && val !== '') {
+                        // معالجة القص الذكي للعنوان المدمج بشرطة مائلة
+                        if (headerName.includes('/')) {
+                            const parts = headerName.split('/').map(p => p.trim());
+                            if (category.includes('كريب')) {
+                                // في الكريب نظهر الكلمة الثانية (رول صغير أو رول وسط)
+                                headerName = parts[1];
+                            } else {
+                                // في باقي الأقسام نظهر الكلمة الأولى (ساده أو موتزاريلا)
+                                headerName = parts[0];
+                            }
+                        }
                         sizes.push({ label: headerName, price: val });
                     }
                 }
@@ -298,14 +301,7 @@
                 <div class="food-card">
                     <span class="food-name">${item.name}</span>
                     <div class="sizes-container">
-                        ${item.sizes.filter(s => {
-                            const currentLabel = s.label.trim();
-                            if (cat.trim() === 'كريب') {
-                                return true;
-                            } else {
-                                return currentLabel !== 'رول وسط';
-                            }
-                        }).map(s => `
+                        ${item.sizes.map(s => `
                             <div class="size-item">
                                 <span class="size-label">${s.label}</span>
                                 <span class="size-price">${s.price} ج.م</span>
