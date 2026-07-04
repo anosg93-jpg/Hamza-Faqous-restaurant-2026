@@ -224,25 +224,20 @@
             });
         }
 
-        let hasLoaded = false;
+        // معالجة وإصلاح مشكلة شاشة الترحيب لتعمل دورة برمجية مستقرة واحدة
+        let width = 0;
         const bar = document.getElementById('loadBar');
         const text = document.getElementById('percentText');
-        const loadInterval = setInterval(() => {
-            if (hasLoaded) return;
-            let width = 0;
-            const timer = setInterval(() => {
-                if (width >= 100) { 
-                    clearInterval(timer); 
-                    document.getElementById('splash-screen').classList.add('splash-hidden'); 
-                    hasLoaded = true;
-                } else { 
-                    width++; 
-                    bar.style.width = width + '%'; 
-                    text.innerText = width + '%'; 
-                }
-            }, 20);
-            clearInterval(loadInterval);
-        }, 100);
+        const timer = setInterval(() => {
+            if (width >= 100) { 
+                clearInterval(timer); 
+                document.getElementById('splash-screen').classList.add('splash-hidden'); 
+            } else { 
+                width++; 
+                bar.style.width = width + '%'; 
+                text.innerText = width + '%'; 
+            }
+        }, 15);
 
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTbvtWltox5iEVqIuta2_R0qNMV35nDf9jGJRwJqSI9Y6kFn5pnV3SbxfLqp61dmXVJhMhm20Fb4pTB/pub?output=csv';
         let menuData = [], cart = [];
@@ -253,7 +248,10 @@
             const response = await fetch(csvUrl + '&t=' + new Date().getTime());
             const data = await response.text();
             const lines = data.split('\n');
-            const headers = lines[0].split(',');
+            
+            // حل مشكلة آخر عمود برمجياً: تنظيف وحذف أي علامات سطر جديد مخفية من العناوين تماماً
+            const headers = lines[0].split(',').map(h => h.replace(/[\r\n]+/g, '').trim());
+            
             menuData = [];
             for(let i = 1; i < lines.length; i++) {
                 if(!lines[i].trim()) continue;
@@ -261,7 +259,10 @@
                 let category = col[0].trim(), name = col[1].trim();
                 let sizes = [];
                 for(let j = 2; j < col.length; j++) {
-                    if(col[j] && !isNaN(col[j])) sizes.push({ label: headers[j].trim(), price: col[j].trim() });
+                    if(col[j] && !isNaN(col[j].trim())) {
+                        const currentHeader = headers[j] ? headers[j] : '';
+                        sizes.push({ label: currentHeader, price: col[j].trim() });
+                    }
                 }
                 if(name) menuData.push({ category, name, sizes });
             }
@@ -282,19 +283,20 @@
         function filterCat(cat, el) {
             if(el) { document.querySelectorAll('.cat-item').forEach(b => b.classList.remove('active')); el.classList.add('active'); }
             
-            // المقاسات المطلوبة لقسم الكريب فقط
-            const crepeSizes = ['رول صغير', 'رول وسط', 'عادي صغير', 'عادي وسط'];
-
             document.getElementById('menuList').innerHTML = menuData.filter(i => i.category === cat).map(item => `
                 <div class="food-card">
                     <span class="food-name">${item.name}</span>
                     <div class="sizes-container">
                         ${item.sizes.filter(s => {
-                            if (cat === 'كريب') {
-                                return crepeSizes.includes(s.label);
+                            // تنظيف نصوص الأحجام لمطابقة دقيقة 100%
+                            const currentLabel = s.label.trim();
+                            
+                            if (cat.trim() === 'كريب') {
+                                // إرجاع الأحجام الأربعة كاملة (بما فيها رول وسط النظيفة)
+                                return true;
                             } else {
-                                // إزالة حجم رول وسط من جميع الأقسام الأخرى فقط
-                                return s.label !== 'رول وسط';
+                                // حذف خيار رول وسط نهائياً من باقي الأقسام الأخرى فقط لا غير
+                                return currentLabel !== 'رول وسط';
                             }
                         }).map(s => `
                             <div class="size-item">
