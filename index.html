@@ -116,8 +116,8 @@
         .add-cart-btn.added { background: var(--success); color: white; }
 
         .restaurant-footer { padding: 30px 20px; text-align: center; background: var(--white); margin-top: 20px; }
-        .footer-phones a { display: block; color: var(--accent); text-decoration: none; font-weight: 800; font-size: 1.6rem; margin-bottom: 10px; }
-        .dev-info { font-size: 0.85rem; color: var(--main-text); margin-top: 15px; font-weight: 700; }
+        .footer-phones a { display: block; color: var(--accent); text-decoration: none; font-weight: 800; font-size: 1.3rem; margin-bottom: 10px; }
+        .dev-info { font-size: 0.75rem; color: var(--desc-text); margin-top: 15px; }
 
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 2000; display: none; justify-content: center; align-items: flex-end; }
         .modal-content { background: var(--white); width: 100%; max-width: 500px; padding: 25px; border-radius: 30px 30px 0 0; max-height: 90vh; overflow-y: auto; }
@@ -176,24 +176,24 @@
         <div class="dev-info">
             جميع الحقوق محفوظة لدى مطعم حمزة فقوس<br>
             Designed by eng / Anas Gaber shehata<br>
-            <a href="tel:01003800314" style="color:var(--main-text);">📞 01003800314</a>
+            <a href="tel:01003800314">📞 01003800314</a>
         </div>
     </footer>
 
     <div class="modal" id="cartModal" onclick="if(event.target==this) toggleCart(false)">
         <div class="modal-content">
-            <h2 style="text-align: right; margin-bottom: 15px;">طلباتك</h2>
+            <h2 style="text-align: right; margin-bottom: 10px;">طلباتك</h2>
             <div id="cartItemsList" style="margin-bottom:15px;"></div>
             <div class="order-type-box">
                 <div class="order-type-btn active" id="deliveryBtn" onclick="setOrderType('دليفري')">دليفري</div>
                 <div class="order-type-btn" id="takeawayBtn" onclick="setOrderType('تيك أواي')">تيك أواي</div>
             </div>
             <div class="user-fields">
-                <div style="text-align: right; margin-bottom: 5px; font-weight: 800;">الاسم بالكامل:</div>
-                <input type="text" id="uName" placeholder="اكتب اسمك هنا">
-                <div style="text-align: right; margin-bottom: 5px; font-weight: 800;">رقم الهاتف:</div>
-                <input type="tel" id="uPhone" placeholder="01xxxxxxxxx">
-                <div style="text-align: right; margin-bottom: 5px; font-weight: 800;" class="address-field">العنوان بالتفصيل:</div>
+                <div style="text-align: right; font-weight: 800; margin-bottom: 5px;">الاسم بالكامل:</div>
+                <input type="text" id="uName" placeholder="الاسم">
+                <div style="text-align: right; font-weight: 800; margin-bottom: 5px;">رقم الهاتف:</div>
+                <input type="tel" id="uPhone" placeholder="رقم الهاتف">
+                <div style="text-align: right; font-weight: 800; margin-bottom: 5px;" class="address-field">العنوان بالتفصيل:</div>
                 <input type="text" id="uAddr" placeholder="العنوان" class="address-field">
             </div>
             <button class="submit-btn" onclick="sendToWA()">تأكيد الطلب عبر WhatsApp</button>
@@ -284,20 +284,6 @@
 
         function addToCart(btn, name, price) {
             cart.push({name, price});
-            const rect = btn.getBoundingClientRect();
-            const cartBtn = document.getElementById('cartBtn');
-            const cartRect = cartBtn.getBoundingClientRect();
-            const fly = document.createElement('div');
-            fly.style.cssText = `position:fixed; left:${rect.left}px; top:${rect.top}px; background:var(--accent); color:#000; padding:5px 10px; border-radius:10px; z-index:9999; transition:0.6s;`;
-            fly.innerText = "+";
-            document.body.appendChild(fly);
-            setTimeout(() => { fly.style.left = cartRect.left + 'px'; fly.style.top = cartRect.top + 'px'; fly.style.opacity = 0; }, 10);
-            setTimeout(() => fly.remove(), 600);
-            btn.innerText = "تم الطلب";
-            btn.classList.add('added');
-            setTimeout(() => { btn.innerText = "اطلب"; btn.classList.remove('added'); }, 1500);
-            cartBtn.classList.add('shake');
-            setTimeout(() => cartBtn.classList.remove('shake'), 500);
             updateCart();
         }
 
