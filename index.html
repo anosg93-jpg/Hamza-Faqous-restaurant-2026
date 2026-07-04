@@ -44,7 +44,7 @@
           --input-border: #444;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; transition: background 0.3s, color 0.3s; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; transition: background 0.15s ease, color 0.15s ease; }
         body { background-color: var(--bg); color: var(--main-text); line-height: 1.6; overflow-x: hidden; }
 
         /* --- شاشة الترحيب --- */
@@ -128,7 +128,7 @@
         .order-type-btn { flex: 1; padding: 12px; border: 2px solid var(--accent); border-radius: 14px; cursor: pointer; text-align: center; font-weight: 800; }
         .order-type-btn.active { background: var(--accent); color: #000; }
         .user-fields { text-align: right; }
-        .user-fields input { background: var(--bg); border: 2px solid var(--input-border); padding: 16px; border-radius: 14px; width: 100%; margin-bottom: 10px; color: var(--main-text); font-weight: 600; }
+        .user-fields input { background: var(--bg); border: 2px solid var(--input-border); padding: 16px; border-radius: 14px; width: 100%; margin-bottom: 10px; color: var(--main-text); font-weight: 600; text-align: right; }
         .submit-btn { background: #34c759; color: white; border: none; padding: 18px; border-radius: 18px; width: 100%; font-weight: 800; }
     </style>
 </head>
@@ -195,7 +195,7 @@
                 <div style="text-align: right; font-weight: 800; margin-bottom: 5px;">الاسم بالكامل:</div>
                 <input type="text" id="uName" placeholder="الاسم">
                 <div style="text-align: right; font-weight: 800; margin-bottom: 5px;">رقم الهاتف:</div>
-                <input type="tel" id="uPhone" placeholder="رقم الهاتف">
+                <input type="tel" id="uPhone" placeholder="رقم الهاتف" style="text-align: right;">
                 <div style="text-align: right; font-weight: 800; margin-bottom: 5px;" class="address-field">العنوان بالتفصيل:</div>
                 <input type="text" id="uAddr" placeholder="العنوان" class="address-field">
             </div>
@@ -230,7 +230,7 @@
         const interval = setInterval(() => {
             if (width >= 100) { clearInterval(interval); document.getElementById('splash-screen').classList.add('splash-hidden'); }
             else { width++; bar.style.width = width + '%'; text.innerText = width + '%'; }
-        }, 30);
+        }, 20);
 
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTbvtWltox5iEVqIuta2_R0qNMV35nDf9jGJRwJqSI9Y6kFn5pnV3SbxfLqp61dmXVJhMhm20Fb4pTB/pub?output=csv';
         let menuData = [], cart = [];
@@ -287,6 +287,20 @@
 
         function addToCart(btn, name, price) {
             cart.push({name, price});
+            const rect = btn.getBoundingClientRect();
+            const cartBtn = document.getElementById('cartBtn');
+            const cartRect = cartBtn.getBoundingClientRect();
+            const fly = document.createElement('div');
+            fly.style.cssText = `position:fixed; left:${rect.left}px; top:${rect.top}px; background:var(--accent); color:#000; padding:5px 10px; border-radius:10px; z-index:9999; transition:0.6s;`;
+            fly.innerText = "+";
+            document.body.appendChild(fly);
+            setTimeout(() => { fly.style.left = cartRect.left + 'px'; fly.style.top = cartRect.top + 'px'; fly.style.opacity = 0; }, 10);
+            setTimeout(() => fly.remove(), 600);
+            btn.innerText = "تم الطلب";
+            btn.classList.add('added');
+            setTimeout(() => { btn.innerText = "اطلب"; btn.classList.remove('added'); }, 1500);
+            cartBtn.classList.add('shake');
+            setTimeout(() => cartBtn.classList.remove('shake'), 500);
             updateCart();
         }
 
@@ -300,7 +314,22 @@
             }).join('') + `<div style="text-align:center; margin-top:10px;">إجمالي الطلب: <b style="color:var(--price-color);">${total} ج.م</b></div>`;
         }
 
-        function toggleCart(s) { document.getElementById('cartModal').style.display = s ? 'flex' : 'none'; }
+        function toggleCart(s) {
+            const modal = document.getElementById('cartModal');
+            if (s) {
+                modal.style.display = 'flex';
+                history.pushState({modalOpen: true}, '');
+            } else {
+                modal.style.display = 'none';
+                if (history.state && history.state.modalOpen) history.back();
+            }
+        }
+        
+        window.onpopstate = () => {
+            if (document.getElementById('cartModal').style.display === 'flex') {
+                document.getElementById('cartModal').style.display = 'none';
+            }
+        };
 
         function sendToWA() {
             const n = document.getElementById('uName').value, p = document.getElementById('uPhone').value, a = document.getElementById('uAddr').value;
