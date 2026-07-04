@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>حمزة فقوس</title>
     
     <link rel="manifest" href="manifest.json">
@@ -117,7 +120,7 @@
 
         .restaurant-footer { padding: 30px 20px; text-align: center; background: var(--white); margin-top: 20px; }
         .footer-phones a { display: block; color: var(--accent); text-decoration: none; font-weight: 800; font-size: 1.3rem; margin-bottom: 10px; }
-        .dev-info { font-size: 0.75rem; color: var(--desc-text); margin-top: 15px; }
+        .dev-info { font-size: 0.8rem; color: var(--desc-text); margin-top: 15px; line-height: 1.8; }
 
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 2000; display: none; justify-content: center; align-items: flex-end; }
         .modal-content { background: var(--white); width: 100%; max-width: 500px; padding: 25px; border-radius: 30px 30px 0 0; max-height: 90vh; overflow-y: auto; }
@@ -174,9 +177,9 @@
             <a href="tel:01060218999">01060218999</a>
         </div>
         <div class="dev-info">
-            جميع الحقوق محفوظة لدى مطعم حمزة فقوس<br>
+            جميع الحقوق محفوظة لدى مطعم حمزة فقوس © 2026<br>
             Designed by eng / Anas Gaber shehata<br>
-            <a href="tel:01003800314">📞 01003800314</a>
+            <a href="tel:01003800314" style="color:var(--desc-text); font-weight:800;">📞 01003800314</a>
         </div>
     </footer>
 
@@ -211,7 +214,7 @@
         }
 
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').then(reg => {
+            navigator.serviceWorker.register('sw.js?v=4').then(reg => {
                 reg.onupdatefound = () => {
                     const worker = reg.installing;
                     worker.onstatechange = () => {
@@ -235,7 +238,7 @@
         function toggleTheme() { document.body.classList.toggle('dark-mode'); }
 
         async function loadMenu() {
-            const response = await fetch(csvUrl);
+            const response = await fetch(csvUrl + '&t=' + new Date().getTime());
             const data = await response.text();
             const lines = data.split('\n');
             const headers = lines[0].split(',');
