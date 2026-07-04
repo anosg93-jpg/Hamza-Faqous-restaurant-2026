@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hamza-cache-v3';
+const CACHE_NAME = 'hamza-cache-v4';
 self.addEventListener('install', e => e.waitUntil(caches.open(CACHE_NAME)));
 self.addEventListener('fetch', e => {
     e.respondWith(
