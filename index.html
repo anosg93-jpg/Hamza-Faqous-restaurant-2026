@@ -214,13 +214,15 @@
             addrFields.forEach(el => el.style.display = (type === 'تيك أواي') ? 'none' : 'block');
         }
 
+        // حل مشكلة التحميل المتكرر والتحديث اللانهائي أثناء الـ Splash Screen
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js?v=99999').then(reg => {
                 reg.onupdatefound = () => {
                     const worker = reg.installing;
                     worker.onstatechange = () => {
                         if (worker.state === 'installed' && navigator.serviceWorker.controller) {
-                            window.location.reload(true);
+                            // التحديث عند الحاجة وبشكل واعي ومثالي بدون Loop
+                            console.log('تحديث جديد متاح، جاري تنشيط الكود...');
                         }
                     };
                 };
@@ -360,9 +362,40 @@
             }
         };
 
+        // تعديل دالة الإرسال لتصبح رسالة تفصيلية شاملة الأصناف والأسعار والإجمالي
         function sendToWA() {
-            const n = document.getElementById('uName').value, p = document.getElementById('uPhone').value, a = document.getElementById('uAddr').value;
-            let msg = `طلب جديد من مطعم حمزة\nالنوع: ${orderType}\nالاسم: ${n}\nالهاتف: ${p}\n${orderType=='دليفري' ? 'العنوان: '+a : ''}\nالطلبات: ` + cart.map(i => i.name).join(', ') + `\nشكرًا لطلبكم من مطعم حمزة`;
+            const n = document.getElementById('uName').value || 'غير محدد';
+            const p = document.getElementById('uPhone').value || 'غير محدد';
+            const a = document.getElementById('uAddr').value || 'غير محدد';
+            
+            if (cart.length === 0) {
+                alert('سلتك فارغة! يرجى إضافة أصناف أولاً.');
+                return;
+            }
+
+            let total = 0;
+            let itemsDetails = '';
+            
+            cart.forEach((item, index) => {
+                total += parseFloat(item.price);
+                itemsDetails += `${index + 1} - ${item.name} ➔ (${item.price} ج.م)\n`;
+            });
+
+            let msg = `*طلب جديد من تطبيق مطعم حمزة* Hamza ✨\n`;
+            msg += `----------------------------------------\n`;
+            msg += `• *نوع الطلب:* ${orderType}\n`;
+            msg += `• *الاسم:* ${n}\n`;
+            msg += `• *الهاتف:* ${p}\n`;
+            if (orderType === 'دليفري') {
+                msg += `• *العنوان:* ${a}\n`;
+            }
+            msg += `----------------------------------------\n`;
+            msg += `*🧾 الأصناف المطلوبة:*\n\n${itemsDetails}`;
+            msg += `----------------------------------------\n`;
+            msg += `• *الحساب الإجمالي:* ${total} ج.م 💵\n`;
+            msg += `----------------------------------------\n`;
+            msg += `شكراً لاختياركم مطعم حمزة (طعم من حتة تانية) ❤️`;
+
             window.open(`https://wa.me/201060218999?text=${encodeURIComponent(msg)}`);
         }
 
