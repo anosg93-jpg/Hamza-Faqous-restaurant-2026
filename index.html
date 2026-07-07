@@ -363,7 +363,7 @@
         function sendToWA() {
             const n = document.getElementById('uName').value, p = document.getElementById('uPhone').value, a = document.getElementById('uAddr').value;
             let msg = `طلب جديد من مطعم حمزة\nالنوع: ${orderType}\nالاسم: ${n}\nالهاتف: ${p}\n${orderType=='دليفري' ? 'العنوان: '+a : ''}\nالطلبات: ` + cart.map(i => i.name).join(', ') + `\nشكرًا لطلبكم من مطعم حمزة`;
-            window.open(`https://wa.me/201099534139?text=${encodeURIComponent(msg)}`);
+            window.open(`https://wa.me/201060218999?text=${encodeURIComponent(msg)}`);
         }
 
         loadMenu();
