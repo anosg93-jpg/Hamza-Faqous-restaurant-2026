@@ -174,7 +174,8 @@
     <footer class="restaurant-footer">
         <div class="footer-phones">
             <span style="font-weight: 800; font-size: 0.95rem;">📞 أرقام المطعم:</span>
-            <a href="tel:01060218999">01060218999</a>
+            <a href="tel:01099534139">01099534139</a>
+            <a href="tel:01101599395">01101599395</a>
         </div>
         <div class="dev-info">
             جميع الحقوق محفوظة لدى مطعم حمزة فقوس © 2026<br>
@@ -362,7 +363,7 @@
         function sendToWA() {
             const n = document.getElementById('uName').value, p = document.getElementById('uPhone').value, a = document.getElementById('uAddr').value;
             let msg = `طلب جديد من مطعم حمزة\nالنوع: ${orderType}\nالاسم: ${n}\nالهاتف: ${p}\n${orderType=='دليفري' ? 'العنوان: '+a : ''}\nالطلبات: ` + cart.map(i => i.name).join(', ') + `\nشكرًا لطلبكم من مطعم حمزة`;
-            window.open(`https://wa.me/201060218999?text=${encodeURIComponent(msg)}`);
+            window.open(`https://wa.me/201099534139?text=${encodeURIComponent(msg)}`);
         }
 
         loadMenu();

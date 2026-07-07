@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hamza-v12'; // قم بتغيير الرقم في كل مرة ترفع فيها تحديثاً كبيراً
+const CACHE_NAME = 'hamza-v13'; // قم بتغيير الرقم في كل مرة ترفع فيها تحديثاً كبيراً
 
 self.addEventListener('install', (event) => {
     self.skipWaiting();
