@@ -15,7 +15,7 @@
     <meta name="apple-mobile-web-app-title" content="مطعم حمزة">
     <link class="brand-logo-img" rel="apple-touch-icon" href="images/logohamza.jpg">
     
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
           --bg: #f4f5f7; 
@@ -264,13 +264,15 @@
                     let headerName = headers[j] ? headers[j].trim() : '';
                     
                     if(val && val !== '') {
-                        if (headerName.includes('/')) {
+                        if (headerName.includes('/') && category !== 'العروض') {
                             const parts = headerName.split('/').map(p => p.trim());
                             if (category.includes('كريب')) {
                                 headerName = parts[1];
                             } else {
                                 headerName = parts[0];
                             }
+                        } else if (category === 'العروض') {
+                            headerName = val;
                         }
                         sizes.push({ label: headerName, price: val });
                     }
