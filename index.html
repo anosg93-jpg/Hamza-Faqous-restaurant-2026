@@ -12,7 +12,7 @@
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="مطعم حمزة فاقوس">
+    <meta name="apple-mobile-web-app-title" content="مطعم حمزة">
     <link class="brand-logo-img" rel="apple-touch-icon" href="images/logohamza.jpg">
     
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -263,15 +263,12 @@
                     let val = col[j] ? col[j].trim() : '';
                     let headerName = headers[j] ? headers[j].trim() : '';
                     
-                    if(val && !isNaN(val) && val !== '') {
-                        // معالجة القص الذكي للعنوان المدمج بشرطة مائلة
+                    if(val && val !== '') {
                         if (headerName.includes('/')) {
                             const parts = headerName.split('/').map(p => p.trim());
                             if (category.includes('كريب')) {
-                                // في الكريب نظهر الكلمة الثانية (رول صغير أو رول وسط)
                                 headerName = parts[1];
                             } else {
-                                // في باقي الأقسام نظهر الكلمة الأولى (ساده أو موتزاريلا)
                                 headerName = parts[0];
                             }
                         }
@@ -297,27 +294,21 @@
         function filterCat(cat, el) {
             if(el) { document.querySelectorAll('.cat-item').forEach(b => b.classList.remove('active')); el.classList.add('active'); }
             
-            if (cat.includes('العروض')) {
-                document.getElementById('menuList').innerHTML = menuData.filter(i => i.category === cat).map(item => `
-                    <div class="food-card" style="text-align: center;">
-                        <span class="food-name" style="margin-bottom: 0; font-size: 1.3rem;">${item.name}</span>
+            document.getElementById('menuList').innerHTML = menuData.filter(i => i.category === cat).map(item => {
+                const isOffers = cat === 'العروض';
+                return `
+                <div class="food-card">
+                    <span class="food-name">${item.name}</span>
+                    <div class="sizes-container" style="${isOffers ? 'display:block;' : ''}">
+                        ${item.sizes.map(s => `
+                            <div class="size-item" style="${isOffers ? 'background:transparent; border:none; padding:0; align-items:flex-start;' : ''}">
+                                <span class="size-label" style="${isOffers ? 'font-size:1rem; color:var(--main-text); text-align:right;' : ''}">${s.label}</span>
+                                ${isOffers ? '' : `<span class="size-price">${s.price} ج.م</span>`}
+                                ${isOffers ? '' : `<button class="add-cart-btn" onclick="addToCart(this, '${item.name} (${s.label})', ${s.price})">اطلب</button>`}
+                            </div>`).join('')}
                     </div>
-                `).join('');
-            } else {
-                document.getElementById('menuList').innerHTML = menuData.filter(i => i.category === cat).map(item => `
-                    <div class="food-card">
-                        <span class="food-name">${item.name}</span>
-                        <div class="sizes-container">
-                            ${item.sizes.map(s => `
-                                <div class="size-item">
-                                    <span class="size-label">${s.label}</span>
-                                    <span class="size-price">${s.price} ج.م</span>
-                                    <button class="add-cart-btn" onclick="addToCart(this, '${item.name} (${s.label})', ${s.price})">اطلب</button>
-                                </div>`).join('')}
-                        </div>
-                    </div>
-                `).join('');
-            }
+                </div>
+            `}).join('');
         }
 
         function addToCart(btn, name, price) {
