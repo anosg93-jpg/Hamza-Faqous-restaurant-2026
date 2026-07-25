@@ -13,7 +13,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="مطعم حمزة">
-    <link class="brand-logo-img" rel="apple-touch-icon" href="images/logohamza.jpg">
+    <link class="brand-logo-img" rel="apple-touch-icon" href="images/logohamza.png">
     
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -137,7 +137,7 @@
     <div id="splash-screen">
         <div class="loader-content">
             <div class="logo-wrapper">
-                <img src="./images/logohamza.jpg" class="loader-logo-big">
+                <img src="./images/logohamza.png" class="loader-logo-big">
             </div>
             <h2 class="loader-text">مطعم حمزة</h2>
             <p class="loader-slogan">طعم من حتة تانية</p>
@@ -151,7 +151,7 @@
             <div class="header-top">
                 <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
                 <div class="header-logo-container">
-                    <img src="./images/logohamza.jpg" class="header-logo">
+                    <img src="./images/logohamza.png" class="header-logo">
                 </div>
                 <div class="cart-trigger-container">
                     <div class="cart-trigger" onclick="toggleCart(true)" id="cartBtn">
@@ -163,7 +163,8 @@
             <div class="header-bottom-addr">
                 <span class="loader-text" style="font-size: 1.2rem;">مطعم حمزة</span>
                 <span class="addr-tag">📍 العنوان:</span>
-                <span class="brand-addr">فاقوس : شارع المكتبات خلف الإدارة التعليمية بجوار بنك الاسكندريه 
+                <span class="brand-addr">فاقوس : شارع المكتبات خلف الإدارة التعليمية بجوار بنك مصر</span>
+            </div>
         </header>
         <div class="category-nav" id="catNav"></div>
     </div>
@@ -173,7 +174,7 @@
     <footer class="restaurant-footer">
         <div class="footer-phones">
             <span style="font-weight: 800; font-size: 0.95rem;">📞 أرقام المطعم:</span>
-            <a href="tel:01099534139">01099534139</a>
+            <a href="tel:01099534193">01099534193</a>
             <a href="tel:01101599395">01101599395</a>
         </div>
         <div class="dev-info">
@@ -220,7 +221,6 @@
                     const worker = reg.installing;
                     worker.onstatechange = () => {
                         if (worker.state === 'installed' && navigator.serviceWorker.controller) {
-                            // التحديث عند الحاجة وبشكل واعي ومثالي بدون Loop
                             console.log('تحديث جديد متاح، جاري تنشيط الكود...');
                         }
                     };
@@ -308,7 +308,7 @@
                             <div class="size-item" style="${isOffers ? 'background:transparent; border:none; padding:0; align-items:flex-start;' : ''}">
                                 <span class="size-label" style="${isOffers ? 'font-size:1rem; color:var(--main-text); text-align:right;' : ''}">${s.label}</span>
                                 ${isOffers ? '' : `<span class="size-price">${s.price} ج.م</span>`}
-                                ${isOffers ? '' : `<button class="add-cart-btn" onclick="addToCart(this, '${item.name} (${s.label})', ${s.price})">اطلب</button>`}
+                                <button class="add-cart-btn" style="${isOffers ? 'margin-top:8px;' : ''}" onclick="addToCart(this, '${item.name}${s.label && !isOffers ? ' ('+s.label+')' : ''}', ${parseFloat(s.price) || 0})">اطلب</button>
                             </div>`).join('')}
                     </div>
                 </div>
@@ -339,7 +339,7 @@
             document.getElementById('cartBadge').classList.add('show');
             let total = 0;
             document.getElementById('cartItemsList').innerHTML = cart.map((item, idx) => {
-                total += parseFloat(item.price);
+                total += parseFloat(item.price) || 0;
                 return `<div style="display:flex; justify-content:space-between; padding:5px; border-bottom:1px solid #eee;"><span>${item.name}</span><b style="color:var(--price-color);">${item.price} ج.م</b></div>`;
             }).join('') + `<div style="text-align:center; margin-top:10px;">إجمالي الطلب: <b style="color:var(--price-color);">${total} ج.م</b></div>`;
         }
@@ -361,7 +361,6 @@
             }
         };
 
-        // تعديل دالة الإرسال لتصبح رسالة تفصيلية شاملة الأصناف والأسعار والإجمالي
         function sendToWA() {
             const n = document.getElementById('uName').value || 'غير محدد';
             const p = document.getElementById('uPhone').value || 'غير محدد';
@@ -376,7 +375,7 @@
             let itemsDetails = '';
             
             cart.forEach((item, index) => {
-                total += parseFloat(item.price);
+                total += parseFloat(item.price) || 0;
                 itemsDetails += `${index + 1} - ${item.name} ➔ (${item.price} ج.م)\n`;
             });
 
