@@ -147,7 +147,7 @@
     </div>
 
     <div class="sticky-wrapper">
-        <header>
+        header>
             <div class="header-top">
                 <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
                 <div class="header-logo-container">
@@ -304,12 +304,22 @@
                 <div class="food-card">
                     <span class="food-name">${item.name}</span>
                     <div class="sizes-container" style="${isOffers ? 'display:block;' : ''}">
-                        ${item.sizes.map(s => `
+                        ${item.sizes.map(s => {
+                            let calculatedPrice = parseFloat(s.price) || 0;
+                            if (isOffers) {
+                                // استخراج أي رقم موجود داخل نص/وصف العرض ليعتبر هو سعر العرض
+                                const match = (s.label || '').match(/(\d+(\.\d+)?)/);
+                                if (match) {
+                                    calculatedPrice = parseFloat(match[0]);
+                                }
+                            }
+                            return `
                             <div class="size-item" style="${isOffers ? 'background:transparent; border:none; padding:0; align-items:flex-start;' : ''}">
                                 <span class="size-label" style="${isOffers ? 'font-size:1rem; color:var(--main-text); text-align:right;' : ''}">${s.label}</span>
                                 ${isOffers ? '' : `<span class="size-price">${s.price} ج.م</span>`}
-                                <button class="add-cart-btn" style="${isOffers ? 'margin-top:8px;' : ''}" onclick="addToCart(this, '${item.name}${s.label && !isOffers ? ' ('+s.label+')' : ''}', ${parseFloat(s.price) || 0})">اطلب</button>
-                            </div>`).join('')}
+                                <button class="add-cart-btn" style="${isOffers ? 'margin-top:8px;' : ''}" onclick="addToCart(this, '${item.name}${s.label && !isOffers ? ' ('+s.label+')' : ''}', ${calculatedPrice})">اطلب</button>
+                            </div>`;
+                        }).join('')}
                     </div>
                 </div>
             `}).join('');
