@@ -188,7 +188,7 @@
             <div class="header-bottom-addr">
                 <span class="loader-text" style="font-size: 1.2rem;">مطعم حمزة</span>
                 <span class="addr-tag">📍 العنوان:</span>
-                <span class="brand-addr">فاقوس : شارع المكتبات خلف الإدارة التعليمية بجوار بنك مصر</span>
+                <span class="brand-addr">فاقوس : شارع المكتبات خلف الإدارة التعليمية خلف بنك الاسكندرية</span>
             </div>
         </header>
         <div class="category-nav" id="catNav"></div>
@@ -316,12 +316,23 @@
                 bar.style.width = width + '%'; 
                 text.innerText = width + '%'; 
             }
-        }, 15);
+        }, 30);
 
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTbvtWltox5iEVqIuta2_R0qNMV35nDf9jGJRwJqSI9Y6kFn5pnV3SbxfLqp61dmXVJhMhm20Fb4pTB/pub?output=csv';
         let menuData = [], cart = [];
 
         function toggleTheme() { document.body.classList.toggle('dark-mode'); }
+
+        function preloadImages(urls) {
+            return Promise.all(urls.map(url => {
+                return new Promise(resolve => {
+                    const img = new Image();
+                    img.onload = resolve;
+                    img.onerror = resolve;
+                    img.src = url;
+                });
+            }));
+        }
 
         async function loadMenu() {
             const response = await fetch(csvUrl + '&t=' + new Date().getTime());
@@ -362,6 +373,11 @@
             }
             listenToFirebaseStatus();
             renderNav();
+
+            const uniqueCats = [...new Set(menuData.map(item => item.category))];
+            const imageUrls = uniqueCats.map(cat => `./images/${cat}.jpg`);
+            imageUrls.push('./images/logohamza.png');
+            await preloadImages(imageUrls);
         }
 
         function listenToFirebaseStatus() {
